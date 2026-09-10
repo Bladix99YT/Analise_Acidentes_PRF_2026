@@ -1,6 +1,6 @@
 import pandas as pd
 
-dataset = "data/raw/acidentes2026_todas_causas_tipos.csv"
+dataset = r"data/raw/acidentes2026_todas_causas_tipos.csv"
 
 df = pd.read_csv(
     dataset,
