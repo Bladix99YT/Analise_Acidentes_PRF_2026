@@ -1,5 +1,7 @@
 import pandas as pd
+import plotly.express as px
 from utils.utils import carregar_dados
+
 
 
 # -------------------------
@@ -34,7 +36,7 @@ acidentes_hora = (
     .reset_index(name="quantidade")
 )
 
-print(acidentes_hora)
+#print(acidentes_hora)
 
 
 # Analise de acidente por horario exato ex: "11:32"
@@ -61,6 +63,76 @@ print(classificacao)
 
 print("\nTotal de acidentes:", df["id"].nunique())
 print("Soma das classificações:", classificacao["quantidade"].sum())
+
+
+
+# -------------------------
+# Causas Principais de acidentes
+# -------------------------
+
+causas_principais = (
+    df[df["causa_principal"] == "Sim"]
+    .groupby("causa_acidente")["id"]
+    .nunique()
+    .reset_index(name="quantidade")
+    .sort_values("quantidade", ascending=False)
+    .reset_index(drop=True)
+)
+
+print("\nTotal de acidentes:", df["id"].nunique())
+print(causas_principais)
+
+
+# -------------------------
+# Graficos de Classificação de acidentes 
+# -------------------------
+
+df_principal = df[df["causa_principal"] == "Sim"]
+
+top_causas = (
+    df_principal.groupby("causa_acidente")["id"]
+    .nunique()
+    .sort_values(ascending=False)
+    .head(10)
+    .index
+)
+
+comparacao = (
+    df_principal[
+        df_principal["causa_acidente"].isin(top_causas)
+    ]
+    .groupby(
+        ["causa_acidente", "classificacao_acidente"]
+    )["id"]
+    .nunique()
+    .reset_index(name="quantidade")
+)
+
+fig = px.bar(
+    comparacao,
+    x="causa_acidente",
+    y="quantidade",
+    color="classificacao_acidente",
+    barmode="group",
+    title="Principais Causas x Classificação dos Acidentes",
+    labels={
+        "causa_acidente": "Causa principal",
+        "classificacao_acidente": "Classificação",
+        "quantidade": "Quantidade de acidentes"
+    }
+)
+
+fig.update_layout(
+    title_x=0.5,
+    xaxis_tickangle=-45
+)
+
+fig.show()
+
+# Seguindo nas 10 maiores causas principais
+# Podemos ver que as maiores causas principais são de reação tardia 
+# ou algo relacionado a atenção do condutor
+# Também essas que estão com maiores causas de acidentes fatais
 
 # -------------------------
 # MAIORES ACIDENTES UNICOS POR HORA/HORARIO
@@ -92,9 +164,9 @@ ids_sem_classificacao = ids_totais - ids_classificados
 
 
 
-print("Acidentes sem classificação:", ids_sem_classificacao)
-print("Quantidade:", len(ids_sem_classificacao))
+#print("Acidentes sem classificação:", ids_sem_classificacao)
+#print("Quantidade:", len(ids_sem_classificacao))
 
-print(maior_hora)
+#print(maior_hora)
 #print(maior_horario)
 
