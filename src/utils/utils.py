@@ -1,4 +1,5 @@
 import pandas as pd
+import json
 
 
 def carregar_dados(dataset):
@@ -14,3 +15,7 @@ def carregar_dados(dataset):
     )
 
     return df
+
+def carregar_geojson(caminho):
+    with open(caminho, "r", encoding="utf-8") as arquivo:
+        return json.load(arquivo)

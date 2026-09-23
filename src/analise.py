@@ -1,6 +1,6 @@
 import pandas as pd
 import plotly.express as px
-from utils.utils import carregar_dados
+from utils.utils import carregar_dados, carregar_geojson
 
 
 
@@ -11,6 +11,10 @@ from utils.utils import carregar_dados
 dataset = "data/processed/acidentes2026_tratados.csv"
 
 df = carregar_dados(dataset)
+
+geojson_brasil = carregar_geojson(
+    "data/GeoJson/br-geojson-main/dist/estados.geojson"
+)
 
 #print(df.info())
 
@@ -231,10 +235,53 @@ fig_dia.update_layout(
     title_x=0.5
 )
 
+# -------------------------
+# ACIDENTES POR UF
+# -------------------------
+
+acidentes_uf = (
+    df.groupby("uf")["id"]
+    .nunique()
+    .reset_index(name="quantidade")
+)
+
+fig_mapa_uf = px.choropleth_map(
+    acidentes_uf,
+    geojson=geojson_brasil,
+    locations="uf",
+    featureidkey="properties.sigla",
+    color="quantidade",
+
+    hover_name="uf",
+
+    color_continuous_scale="Blues",
+
+    center={
+        "lat": -14.2,
+        "lon": -51.9
+    },
+
+    zoom=2.8,
+
+    map_style="carto-positron",
+
+    title="Quantidade de Acidentes por UF"
+)
+
+fig_mapa_uf.update_layout(
+    title_x=0.5,
+    margin={
+        "r": 0,
+        "t": 50,
+        "l": 0,
+        "b": 0
+    }
+)
+
 
 #Variavel para alternar entre gráficos para alternar 
 # basta mudar o valor da variavel "grafico"
-grafico = "dia"
+grafico = "uf"
 
 if (grafico == "comparacao"):
     fig_comparacao.show()
@@ -250,6 +297,9 @@ elif(grafico == "hora"):
 
 elif(grafico == "dia"):
     fig_dia.show()
+
+elif(grafico == "uf"):
+    fig_mapa_uf.show()
 
 # Seguindo nas 10 maiores causas principais
 # Podemos ver que as maiores causas principais são de reação tardia 
