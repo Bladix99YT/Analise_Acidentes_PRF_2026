@@ -37,17 +37,6 @@ contagem = (
     .reset_index(name="quantidade")
 )
 
-
-# Analise de acidente por hora padrão ex: 11:00
-acidentes_hora = (
-    df.groupby("hora")["id"]
-    .nunique()
-    .reset_index(name="quantidade")
-)
-
-#print(acidentes_hora)
-
-
 # Analise de acidente por horario exato ex: "11:32"
 # Criei essas duas ramificações pois pode ser que tenha varios acidentes nesse mesmo horario
 # Como o mesmo acidente pode aparecer em várias linhas no dataset,
@@ -194,12 +183,40 @@ fig_horario = px.line(
 # HORA ACIDENTES
 # -------------------------
 
+# Analise de acidente por hora padrão ex: 11:00
+acidentes_hora = (
+    df.groupby("hora")["id"]
+    .nunique()
+    .reset_index(name="quantidade")
+)
+
 fig_hora = px.line(
     acidentes_hora,
     x="hora",
     y="quantidade",
     markers=True,
     title="Quantidade de acidentes por hora exata"
+)
+
+fig_hora.update_layout(
+    title_x=0.5,
+    autosize=True,
+    height=600,
+    margin={
+        "l": 60,
+        "r": 30,
+        "t": 70,
+        "b": 60
+    }
+)
+
+fig_hora.write_html(
+    "site/graficos/acidentes_hora.html",
+    include_plotlyjs="cdn",
+    full_html=True,
+    config={
+        "responsive": True
+    }
 )
 
 # -------------------------
@@ -398,7 +415,7 @@ fig_mapa_brs.update_layout(
 
 #Variavel para alternar entre gráficos para alternar 
 # basta mudar o valor da variavel "grafico"
-grafico = "brs"
+grafico = "hora"
 
 if (grafico == "comparacao"):
     fig_comparacao.show()

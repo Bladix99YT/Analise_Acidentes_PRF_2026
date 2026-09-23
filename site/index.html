@@ -8,7 +8,7 @@
 
     <title>Análise de Acidentes PRF 2026</title>
 
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="./css/style.css">
 </head>
 
 <body>
@@ -87,7 +87,9 @@
             </p>
 
 
-            <!-- INDICADORES -->
+            <!-- -------------------------
+                 INDICADORES
+            -------------------------- -->
 
             <div class="cards">
 
@@ -308,22 +310,25 @@
 
             <div class="grid-graficos">
 
+                <!-- -------------------------
+                     ACIDENTES POR HORA
+                -------------------------- -->
+
                 <div class="grafico">
 
                     <h3>
                         Acidentes por hora
                     </h3>
 
-                    <div class="grafico-placeholder">
-
-                        <p>
-                            Gráfico por hora
-                        </p>
-
-                    </div>
+                    <iframe class="grafico-plotly" src="./graficos/acidentes_hora.html"
+                        title="Acidentes por hora"></iframe>
 
                 </div>
 
+
+                <!-- -------------------------
+                     ACIDENTES POR DIA DA SEMANA
+                -------------------------- -->
 
                 <div class="grafico">
 
@@ -506,7 +511,7 @@
     </main>
 
 
-    <script src="js/script.js"></script>
+    <script src="./js/script.js"></script>
 
 </body>
 
