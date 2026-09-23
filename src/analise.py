@@ -59,10 +59,10 @@ classificacao = (
     .reset_index(name="quantidade")
 )
 
-print(classificacao)
+# print(classificacao)
 
-print("\nTotal de acidentes:", df["id"].nunique())
-print("Soma das classificações:", classificacao["quantidade"].sum())
+# print("\nTotal de acidentes:", df["id"].nunique())
+# print("Soma das classificações:", classificacao["quantidade"].sum())
 
 
 
@@ -79,13 +79,14 @@ causas_principais = (
     .reset_index(drop=True)
 )
 
-print("\nTotal de acidentes:", df["id"].nunique())
-print(causas_principais)
+# print("\nTotal de acidentes:", df["id"].nunique())
+# print(causas_principais)
 
 
 # -------------------------
 # Graficos de Classificação de acidentes 
 # -------------------------
+
 
 df_principal = df[df["causa_principal"] == "Sim"]
 
@@ -96,6 +97,11 @@ top_causas = (
     .head(10)
     .index
 )
+
+
+# -------------------------
+# CAUSA DE ACIDENTES
+# -------------------------
 
 comparacao = (
     df_principal[
@@ -108,10 +114,10 @@ comparacao = (
     .reset_index(name="quantidade")
 )
 
-fig = px.bar(
+fig_comparacao = px.bar(
     comparacao,
-    x="causa_acidente",
-    y="quantidade",
+    x= "causa_acidente",
+    y= "quantidade",
     color="classificacao_acidente",
     barmode="group",
     title="Principais Causas x Classificação dos Acidentes",
@@ -122,12 +128,128 @@ fig = px.bar(
     }
 )
 
-fig.update_layout(
+fig_comparacao.update_layout(
     title_x=0.5,
     xaxis_tickangle=-45
 )
 
-fig.show()
+# -------------------------
+# TIPO X CAUSA DE ACIDENTE
+# -------------------------
+
+tipo_causa = (
+    df[
+        (df["causa_principal"] == "Sim")
+        & (df["ordem_tipo_acidente"] == 1)
+    ]
+    .groupby(["tipo_acidente", "causa_acidente"])["id"]
+    .nunique()
+    .reset_index(name="quantidade")
+    .sort_values("quantidade", ascending=False)
+)
+
+fig_causa_tipo = px.bar(
+    tipo_causa,
+    x="quantidade",
+    y="tipo_acidente",
+    color="causa_acidente",
+    orientation="h",
+    title="Causa x Tipo Acidente",
+    labels={
+        "tipo_acidente": "Tipo_acidente",
+        "causa_acidente": "Causa_acidente",
+        "quantidade": "Quantidade de acidentes"
+    },
+    text="quantidade"  
+)
+
+fig_causa_tipo.update_layout(
+    title_x=0.5,
+    yaxis={"categoryorder": "total ascending"}
+)
+
+# -------------------------
+# HORARIO ACIDENTES
+# -------------------------
+
+fig_horario = px.line(
+    acidentes_horario,
+    x="horario",
+    y="quantidade",
+    markers=True,
+    title= "Quantidade de acidentes por faixa horária"
+
+)
+
+# -------------------------
+# HORA ACIDENTES
+# -------------------------
+
+fig_hora = px.line(
+    acidentes_hora,
+    x="hora",
+    y="quantidade",
+    markers=True,
+    title="Quantidade de acidentes por hora exata"
+)
+
+# -------------------------
+# ACIDENTES DIA DA SEMANA
+# -------------------------
+
+acidentes_dia = (
+    df.groupby("dia_semana")["id"]
+    .nunique()
+    .reset_index(name="quantidade")
+)
+ordem_dias = [
+    "segunda",
+    "terça",
+    "quarta",
+    "quinta",
+    "sexta",
+    "sábado",
+    "domingo"
+]
+
+fig_dia = px.bar(
+    acidentes_dia,
+    x="dia_semana",
+    y="quantidade",
+    title="Quantidade de Acidentes por Dia da Semana",
+    labels={
+        "dia_semana": "Dia da semana",
+        "quantidade": "Quantidade de acidentes"
+    },
+    text="quantidade",
+    category_orders={
+        "dia_semana": ordem_dias
+    }
+)
+
+fig_dia.update_layout(
+    title_x=0.5
+)
+
+
+#Variavel para alternar entre gráficos para alternar 
+# basta mudar o valor da variavel "grafico"
+grafico = "dia"
+
+if (grafico == "comparacao"):
+    fig_comparacao.show()
+
+elif(grafico == "causa_tipo"):
+    fig_causa_tipo.show()
+
+elif(grafico == "horario"):
+    fig_horario.show()
+
+elif(grafico == "hora"):
+    fig_hora.show()
+
+elif(grafico == "dia"):
+    fig_dia.show()
 
 # Seguindo nas 10 maiores causas principais
 # Podemos ver que as maiores causas principais são de reação tardia 
@@ -146,6 +268,8 @@ maior_horario = acidentes_horario.loc[
     acidentes_horario["quantidade"].idxmax()
 ]
 
+#print(maior_hora)
+#print(maior_horario)
 
 # -------------------------
 # IDENTIFICANDO ACIDENTES SEM CLASSIFICAÇÃO
@@ -162,11 +286,8 @@ ids_classificados = set(
 
 ids_sem_classificacao = ids_totais - ids_classificados
 
-
-
 #print("Acidentes sem classificação:", ids_sem_classificacao)
 #print("Quantidade:", len(ids_sem_classificacao))
 
-#print(maior_hora)
-#print(maior_horario)
+
 
