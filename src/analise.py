@@ -1,5 +1,6 @@
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
 from utils.utils import carregar_dados, carregar_geojson
 
 
@@ -14,6 +15,10 @@ df = carregar_dados(dataset)
 
 geojson_brasil = carregar_geojson(
     "data/GeoJson/br-geojson-main/dist/estados.geojson"
+)
+
+geojson_brs = carregar_geojson(
+    "data/GeoJson/rodovias_federais_brasil.json"
 )
 
 #print(df.info())
@@ -278,10 +283,122 @@ fig_mapa_uf.update_layout(
     }
 )
 
+# -------------------------
+# ACIDENTES POR BR
+# -------------------------
+
+acidentes_br = (
+    df.dropna(subset=["br"])
+    .groupby("br")["id"]
+    .nunique()
+    .reset_index(name="quantidade")
+    .sort_values("quantidade", ascending=False)
+    .reset_index(drop=True)
+)
+
+# Padronizando o número da BR
+acidentes_br["br"] = (
+    acidentes_br["br"]
+    .astype(int)
+    .astype(str)
+    .str.zfill(3)
+)
+
+# Criando nome formatado
+acidentes_br["rodovia"] = "BR-" + acidentes_br["br"]
+
+
+# -------------------------
+# TOP 10 BRs COM MAIS ACIDENTES
+# -------------------------
+
+top_brs = acidentes_br.head(10)
+
+
+fig_mapa_brs = go.Figure(fig_mapa_uf)
+
+
+# Percorrendo as 10 BRs com mais acidentes
+for _, linha in top_brs.iterrows():
+
+    numero_br = linha["br"]
+    quantidade = linha["quantidade"]
+
+    longitude = []
+    latitude = []
+
+    # Procurando todos os trechos da BR no GeoJSON
+    for trecho in geojson_brs["features"]:
+
+        if trecho["properties"]["vl_br"] == numero_br:
+
+            coordenadas = trecho["geometry"]["coordinates"]
+
+            # Pegando longitude e latitude de cada ponto
+            for coordenada in coordenadas:
+
+                longitude.append(coordenada[0])
+                latitude.append(coordenada[1])
+
+            # Separando um trecho do próximo
+            longitude.append(None)
+            latitude.append(None)
+
+    # Adicionando a BR no mapa
+    fig_mapa_brs.add_trace(
+        go.Scattermap(
+            lon=longitude,
+            lat=latitude,
+            mode="lines",
+
+            line={
+                "width": 3
+            },
+
+            name=f"BR-{numero_br}",
+
+            hovertemplate=(
+                f"BR-{numero_br}<br>"
+                f"Acidentes: {quantidade}"
+                "<extra></extra>"
+            )
+        )
+    )
+
+
+# -------------------------
+# CONFIGURAÇÃO DO MAPA
+# -------------------------
+
+fig_mapa_brs.update_layout(
+    title="Acidentes por UF e Principais BRs",
+    title_x=0.5,
+
+    margin={
+        "r": 20,
+        "t": 50,
+        "l": 20,
+        "b": 100
+    },
+
+    legend={
+        "orientation": "h",
+        "yanchor": "top",
+        "y": -0.08,
+        "xanchor": "center",
+        "x": 0.5
+    },
+
+    coloraxis_colorbar={
+        "title": "Quantidade",
+        "x": 1.02
+    }
+)
+
 
 #Variavel para alternar entre gráficos para alternar 
 # basta mudar o valor da variavel "grafico"
-grafico = "uf"
+grafico = "brs"
 
 if (grafico == "comparacao"):
     fig_comparacao.show()
@@ -300,6 +417,9 @@ elif(grafico == "dia"):
 
 elif(grafico == "uf"):
     fig_mapa_uf.show()
+
+elif(grafico == "brs"):
+    fig_mapa_brs.show()
 
 # Seguindo nas 10 maiores causas principais
 # Podemos ver que as maiores causas principais são de reação tardia 
