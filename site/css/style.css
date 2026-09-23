@@ -1,0 +1,417 @@
+/* -------------------------
+   CONFIGURAÇÕES GERAIS
+-------------------------- */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family:
+        Inter,
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    background: #f8fafc;
+    color: #1e293b;
+}
+
+
+/* -------------------------
+   MENU LATERAL
+-------------------------- */
+
+.sidebar {
+    position: fixed;
+
+    width: 250px;
+    height: 100vh;
+
+    background: #ffffff;
+
+    border-right: 1px solid #e2e8f0;
+
+    padding: 32px 24px;
+}
+
+.sidebar-topo {
+    margin-bottom: 40px;
+}
+
+.sidebar-topo h2 {
+    color: #2563eb;
+
+    font-size: 24px;
+}
+
+.sidebar-topo p {
+    color: #64748b;
+
+    font-size: 14px;
+
+    margin-top: 5px;
+}
+
+
+/* -------------------------
+   MENU
+-------------------------- */
+
+.menu {
+    display: flex;
+    flex-direction: column;
+
+    gap: 8px;
+}
+
+.menu a {
+    text-decoration: none;
+
+    color: #475569;
+
+    padding: 10px 12px;
+
+    border-radius: 6px;
+
+    transition: 0.2s;
+}
+
+.menu a:hover {
+    background: #eff6ff;
+
+    color: #2563eb;
+}
+
+
+/* -------------------------
+   CONTEÚDO
+-------------------------- */
+
+.conteudo {
+    margin-left: 250px;
+
+    max-width: 1400px;
+
+    padding: 0 60px;
+}
+
+
+/* -------------------------
+   SEÇÕES
+-------------------------- */
+
+.secao {
+    padding: 80px 0;
+
+    border-bottom: 1px solid #e2e8f0;
+}
+
+
+/* -------------------------
+   HERO
+-------------------------- */
+
+.hero {
+    padding-top: 100px;
+}
+
+.tag {
+    display: inline-block;
+
+    background: #dbeafe;
+
+    color: #1d4ed8;
+
+    padding: 6px 12px;
+
+    border-radius: 20px;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    margin-bottom: 20px;
+}
+
+.hero h1 {
+    font-size: 48px;
+
+    max-width: 800px;
+
+    line-height: 1.1;
+
+    margin-bottom: 20px;
+
+    color: #0f172a;
+}
+
+.descricao {
+    font-size: 19px;
+
+    color: #64748b;
+
+    max-width: 700px;
+
+    line-height: 1.7;
+}
+
+
+/* -------------------------
+   CARDS
+-------------------------- */
+
+.cards {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 20px;
+
+    margin-top: 50px;
+}
+
+.card {
+    background: #ffffff;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 10px;
+
+    padding: 25px;
+}
+
+.card-titulo {
+    display: block;
+
+    color: #64748b;
+
+    font-size: 14px;
+
+    margin-bottom: 10px;
+}
+
+.card strong {
+    display: block;
+
+    font-size: 32px;
+
+    color: #0f172a;
+
+    margin-bottom: 8px;
+}
+
+.card-descricao {
+    font-size: 13px;
+
+    color: #94a3b8;
+}
+
+
+/* -------------------------
+   TÍTULOS DAS SEÇÕES
+-------------------------- */
+
+.titulo-secao {
+    display: flex;
+
+    gap: 20px;
+
+    margin-bottom: 40px;
+}
+
+.titulo-secao>span {
+    color: #2563eb;
+
+    font-weight: bold;
+
+    font-size: 14px;
+
+    margin-top: 7px;
+}
+
+.titulo-secao h2 {
+    color: #0f172a;
+
+    font-size: 30px;
+
+    margin-bottom: 8px;
+}
+
+.titulo-secao p {
+    color: #64748b;
+}
+
+
+/* -------------------------
+   GRÁFICOS
+-------------------------- */
+
+.grafico {
+    background: #ffffff;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 10px;
+
+    padding: 25px;
+
+    margin-bottom: 25px;
+}
+
+.grafico h3 {
+    margin-bottom: 20px;
+
+    color: #334155;
+}
+
+.grid-graficos {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 25px;
+}
+
+.grafico-placeholder {
+    height: 300px;
+
+    background: #f8fafc;
+
+    border: 2px dashed #cbd5e1;
+
+    border-radius: 8px;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    color: #94a3b8;
+}
+
+.grafico-placeholder.grande {
+    height: 400px;
+}
+
+.grafico-placeholder.mapa {
+    height: 500px;
+}
+
+
+/* -------------------------
+   METODOLOGIA
+-------------------------- */
+
+.metodologia {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 25px;
+}
+
+.metodologia article {
+    background: #ffffff;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 10px;
+
+    padding: 25px;
+}
+
+.metodologia h3 {
+    margin-bottom: 12px;
+
+    color: #0f172a;
+}
+
+.metodologia p {
+    color: #64748b;
+
+    line-height: 1.7;
+}
+
+code {
+    background: #e2e8f0;
+
+    padding: 2px 5px;
+
+    border-radius: 4px;
+}
+
+
+/* -------------------------
+   RODAPÉ
+-------------------------- */
+
+footer {
+    padding: 40px 0;
+
+    color: #94a3b8;
+
+    font-size: 14px;
+}
+
+
+/* -------------------------
+   RESPONSIVO
+-------------------------- */
+
+@media (max-width: 900px) {
+
+    .sidebar {
+        position: relative;
+
+        width: 100%;
+        height: auto;
+
+        border-right: none;
+
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .menu {
+        flex-direction: row;
+
+        flex-wrap: wrap;
+    }
+
+    .conteudo {
+        margin-left: 0;
+
+        padding: 0 25px;
+    }
+
+    .hero h1 {
+        font-size: 36px;
+    }
+
+    .cards {
+        grid-template-columns: 1fr;
+    }
+
+    .grid-graficos {
+        grid-template-columns: 1fr;
+    }
+
+    .metodologia {
+        grid-template-columns: 1fr;
+    }
+
+    .menu a.ativo {
+        background: #eff6ff;
+        color: #2563eb;
+        font-weight: 600;
+    }
+}
